@@ -10,6 +10,19 @@ function Square(props){
   );
 }
 
+class InvertOrder extends React.Component{
+
+ render(){
+    return (
+      <button
+        onClick = {() => this.props.onClick()}
+      >
+        {this.props.order ? 'Change to Descending':'Change to Ascending'}
+      </button>
+    );
+  }
+}
+
 class Board extends React.Component {
 
   renderSquare(i) {
@@ -55,7 +68,8 @@ class Game extends React.Component {
         selected: true,
       }],
       xIsNext: true,
-      stepNumber: 0,      
+      stepNumber: 0,
+      order: true,      
     };
   }
 
@@ -97,6 +111,12 @@ class Game extends React.Component {
       xIsNext: (step % 2) === 0,
     });
   }
+  
+  changeOrder(){
+    this.setState({
+      order: this.state.order ? false : true,
+    });    
+  }
 
   render() {
     const history = this.state.history;
@@ -135,7 +155,15 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <ol>{this.state.order ? moves : moves.reverse()}</ol>
+        </div>
+        <div className="game-info">
+          <div>
+            <InvertOrder 
+              order = {this.state.order}
+              onClick = {() => this.changeOrder()}
+            />
+          </div>
         </div>
       </div>
     );
